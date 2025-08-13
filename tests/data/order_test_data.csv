@@ -1,0 +1,7 @@
+TestCase ID,TestCase Name,Input,Number valid,Field
+TC-02-001,Confirm no Order is exceed the curent date,10/06/2025,0.0,
+TC-02-002,Search Order by Invoice Number,INV-2022000002,,invoice-number
+TC-02-003,Search Order by Billing Address,Test street 123,,address
+TC-02-004,Search Order by Invoice Day,2025-06-11,,invoice_date
+TC-02-005,Search Order by Status,AWAITING_FULFILLMENT,,order-status
+TC-02-006,Search Order by Status,COMPLETED,0.0,order-status

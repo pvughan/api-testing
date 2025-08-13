@@ -8,7 +8,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@playwright/test": "^1.53.1",
-    "@types/node": "^24.0.7"
+    "@playwright/test": "^1.54.2",
+    "@types/node": "^24.0.7",
+    "csv-parse": "^6.1.0",
+    "mysql2": "^3.14.3",
+    "pandas": "^0.0.3"
   }
 }

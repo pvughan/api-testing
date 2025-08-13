@@ -1,0 +1,21 @@
+TestCase ID,TestCase Name, method, url, name, description, stock, price, is_location_offer, is_rental, brand_id, category_id, product_image_id, status_code, error_field
+TC-PRO-ADD-001,Create product with all valid inputs,POST,{{base_url}}/products,Hammer,Normal hammer,10,20.00,true,true,1,1,1,201,
+TC-PRO-ADD-002,Reject product creation when name is empty,POST,{{base_url}}/products,,Normal hammer,10,20.00,true,true,1,1,1,422,name
+TC-PRO-ADD-003,Reject product creation when description is empty,POST,{{base_url}}/products,Hammer,,10,20.00,true,true,1,1,1,422,description
+TC-PRO-ADD-004,Reject product creation when stock is empty,POST,{{base_url}}/products,Hammer,Normal hammer,,20.00,true,true,1,1,1,422,stock
+TC-PRO-ADD-005,Reject product creation when price is empty,POST,{{base_url}}/products,Hammer,Normal hammer,10,,true,true,1,1,1,422,price
+TC-PRO-ADD-006,Accept product creation when is_location_offer is empty,POST,{{base_url}}/products,Hammer,Normal hammer,10,20.00,false,true,1,1,1,201,
+TC-PRO-ADD-007,Accept product creation when is_rental is empty,POST,{{base_url}}/products,Hammer,Normal hammer,10,20.00,true,false,1,1,1,201,
+TC-PRO-ADD-008,Reject product creation when brand_id is empty,POST,{{base_url}}/products,Hammer,Normal hammer,10,20.00,true,true,,1,1,422,brand_id
+TC-PRO-ADD-009,Reject product creation when category_id is empty,POST,{{base_url}}/products,Hammer,Normal hammer,10,20.00,true,true,1,,1,422,category_id
+TC-PRO-ADD-010,Reject product creation when product_image_id is empty,POST,{{base_url}}/products,Hammer,Normal hammer,10,20.00,true,true,1,1,,422,product_image_id
+TC-PRO-ADD-011,Accept name at maximum allowed length (120 chars),POST,{{base_url}}/products,aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa,Normal hammer,10,20.00,true,true,1,1,1,201,
+TC-PRO-ADD-012,Reject product creation when name is just above maximum boundary,POST,{{base_url}}/products,aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa,Normal hammer,10,20.00,true,true,1,1,1,422,name
+TC-PRO-ADD-013,Reject when name consists of only whitespace,POST,{{base_url}}/products,,Normal hammer,10,20.00,true,true,1,1,1,422,name
+TC-PRO-ADD-014,Accept name containing special characters,POST,{{base_url}}/products,!@#$%^&*(),Normal hammer,10,20.00,true,true,1,1,1,201,
+TC-PRO-ADD-015,Reject product creation when stock is negative,POST,{{base_url}}/products,Hammer,Normal hammer,-1,20.00,true,true,1,1,1,422,stock
+TC-PRO-ADD-016,Reject when stock is not an integer (e.g. 5.5),POST,{{base_url}}/products,Hammer,Normal hammer,5.5,20.00,true,true,1,1,1,422,stock
+TC-PRO-ADD-017,Reject when price is below minimum (0.00),POST,{{base_url}}/products,Hammer,Normal hammer,10,00.00,true,true,1,1,1,422,price
+TC-PRO-ADD-018,Reject when price is negative,POST,{{base_url}}/products,Hammer,Normal hammer,10,-1.00,true,true,1,1,1,422,price
+TC-PRO-ADD-019,Accept product creation when Price is 200,POST,{{base_url}}/products,Hammer,Normal hammer,10,200.00,true,true,1,1,1,422,price
+TC-PRO-ADD-020,Reject when Price is greater than 200,POST,{{base_url}}/products,Hammer,Normal hammer,10,201.00,true,true,1,1,1,422,price

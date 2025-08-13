@@ -1,0 +1,22 @@
+TestCase ID,TestCase Name,Should create product?, Name, Description, Stock, Price, Location offer, Item for rent, Brand, Category, Image
+TC-01-001,Create product with all valid inputs,Yes,Hammer,Normal hammer,10,20.00,true,true,1,1,1
+TC-01-002,Reject product creation when Name is empty,No,,Normal hammer,10,20.00,true,true,1,1,1
+TC-01-003,Reject product creation when Description is empty,No,Hammer,,10,20.00,true,true,1,1,1
+TC-01-004,Reject product creation when Stock is empty,No,Hammer,Normal hammer,,20.00,true,true,1,1,1
+TC-01-005,Reject product creation when Price is empty,No,Hammer,Normal hammer,10,,true,true,1,1,1
+TC-01-006,Accept product creation when Location offer is empty,Yes,Hammer,Normal hammer,10,20.00,false,true,1,1,1
+TC-01-007,Accept product creation when Item for rent is empty,Yes,Hammer,Normal hammer,10,20.00,true,false,1,1,1
+TC-01-008,Reject product creation when Brand is empty,No,Hammer,Normal hammer,10,20.00,true,true,,1,1
+TC-01-009,Reject product creation when Category is empty,No,Hammer,Normal hammer,10,20.00,true,true,1,,1
+TC-01-010,Reject product creation when Image is empty,No,Hammer,Normal hammer,10,20.00,true,true,1,1,
+TC-01-011,Accept Name at maximum allowed length (120 chars),Yes,aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa,Normal hammer,10,20.00,true,true,1,1,1
+TC-01-012,Reject product creation when Name is just above maximum boundary,No,aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa,Normal hammer,10,20.00,true,true,1,1,1
+TC-01-013,Reject when Name consists of only whitespace,No,   ,Normal hammer,10,20.00,true,true,1,1,1
+TC-01-014,Accept Name containing special characters,Yes,!@#$%^&*(),Normal hammer,10,20.00,true,true,1,1,1
+TC-01-015,Reject product creation when Stock is negative,No,Hammer,Normal hammer,-1,20.00,true,true,1,1,1
+TC-01-016,Reject when Stock is not an integer (e.g. 5.5),No,Hammer,Normal hammer,5.5,20.00,true,true,1,1,1
+TC-01-017,Reject when Price is below minimum (0.00),No,Hammer,Normal hammer,10,00.00,true,true,1,1,1
+TC-01-018,Reject when Price is neagtive,No,Hammer,Normal hammer,10,-1.00,true,true,1,1,1
+TC-01-019,Accept product creation when Price is 200,Yes,Hammer,Normal hammer,10,200.00,true,true,1,1,1
+TC-01-020,Reject when Price is greater than 200,No,Hammer,Normal hammer,10,210.00,true,true,1,1,1
+
