@@ -14,11 +14,6 @@ jobs:
         run: |
           export DISABLE_LOGGING=true
           docker compose -f docker-compose.yml up -d --force-recreate
-      # - name: Sleep for 60 seconds
-      #   run: sleep 60s
-      #   shell: bash
-      # - name: GET Version
-      #   run: curl -v -X GET 'http://localhost:8091/status'
       - name: Wait for API ready
         run: |
           for i in {1..30}; do
@@ -30,6 +25,13 @@ jobs:
             sleep 5
           done
           exit 1
+      - name: GET Version
+        run: curl -v -X GET 'http://localhost:8091/status'
+      - name: POST login
+        run: |
+          curl -v -X POST 'http://localhost:8091/users/login' \
+          -H 'Content-Type: application/json' \
+          --data-raw '{"email":"customer@practicesoftwaretesting.com","password":"welcome01"}'
       - name: Install node ⚙️
         uses: actions/setup-node@v4
         with:
@@ -45,7 +47,6 @@ jobs:
           newman run postman/collections/HW07.postman_collection.json \
             --folder "Search product" \
             --iteration-data postman/data/searchProductData.csv \
-            --env-var base_url=http://localhost:8091 \
             --reporters cli,htmlextra \
             --reporter-htmlextra-export newman/report-search-product.html
       - name: Cleanup containers
