@@ -14,11 +14,22 @@ jobs:
         run: |
           export DISABLE_LOGGING=true
           docker compose -f docker-compose.yml up -d --force-recreate
-      - name: Sleep for 60 seconds
-        run: sleep 60s
-        shell: bash
-      - name: GET Version
-        run: curl -v -X GET 'http://localhost:8091/status'
+      # - name: Sleep for 60 seconds
+      #   run: sleep 60s
+      #   shell: bash
+      # - name: GET Version
+      #   run: curl -v -X GET 'http://localhost:8091/status'
+      - name: Wait for API ready
+        run: |
+          for i in {1..30}; do
+            if curl -s http://localhost:8091/status; then
+              echo "API is ready"
+              exit 0
+            fi
+            echo "Waiting for API..."
+            sleep 5
+          done
+          exit 1
       - name: Install node ⚙️
         uses: actions/setup-node@v4
         with:
