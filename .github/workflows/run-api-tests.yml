@@ -35,7 +35,7 @@ jobs:
           mkdir -p newman
           newman run postman/collections/HW07.postman_collection.json \
             --folder "Search product" \
-            --iteration-data postman/data/addProductData.csv \
+            --iteration-data postman/data/searchProductData.csv \
             --reporters cli,htmlextra \
             --reporter-htmlextra-export newman/report-create-product.html
 
