@@ -1,0 +1,478 @@
+{
+	"info": {
+		"_postman_id": "cdf41567-a109-4bcd-b5c8-7ddf250cb89d",
+		"name": "HW7",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37758318",
+		"_collection_link": "https://a11111-0286.postman.co/workspace/Team-7---Testing---Workspace~662d984b-d9b5-435d-86e0-8157cde33e5c/collection/37758318-cdf41567-a109-4bcd-b5c8-7ddf250cb89d?action=share&source=collection_link&creator=37758318"
+	},
+	"item": [
+		{
+			"name": "Search product",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const baseUrl = pm.variables.get('base_url');\r",
+							"const method = pm.iterationData.get('method').toString().toUpperCase();\r",
+							"let url = pm.iterationData.get('url').toString().trim();\r",
+							"const q = pm.iterationData.get('q');\r",
+							"\r",
+							"if (method) pm.request.method = method;\r",
+							"if (url)\r",
+							"    pm.request.url = url;\r",
+							"// Thêm param q nếu có và chưa có q trong url\r",
+							"if (q && !url.includes('q=')) {\r",
+							"    url += (url.includes('?') ? '&' : '?') + 'q=' + encodeURIComponent(q);\r",
+							"}\r",
+							"\r",
+							"pm.request.url = url;\r",
+							"pm.request.headers.upsert({ key: 'Accept', value: 'application/json' });"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const expectStatus = Number(pm.iterationData.get('status'));",
+							"",
+							"pm.test(`[Status] expect ${expectStatus}`, () => {",
+							"    pm.response.to.have.status(expectStatus);",
+							"});",
+							"",
+							"if (pm.response.code === 200) {",
+							"    const body = pm.response.json();",
+							"    const items = Array.isArray(body) ? body : body.data;",
+							"",
+							"    pm.test('Response contains an array of products', () => {",
+							"        pm.expect(items).to.be.an('array');",
+							"    });",
+							"",
+							"    if (items.length > 0) {",
+							"        pm.test('Each product has id, name, and optional price', () => {",
+							"            items.forEach(p => {",
+							"                pm.expect(p).to.have.property('id');",
+							"                pm.expect(p).to.have.property('name');",
+							"                if (p.hasOwnProperty('price')) {",
+							"                    pm.expect(p.price).to.be.at.least(0);",
+							"                }",
+							"            });",
+							"        });",
+							"    }",
+							"}",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{base_url}}/products/search",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"products",
+						"search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Invoice",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Lấy dữ liệu từ file JSON hoặc dữ liệu CSV",
+							"let user_id = pm.iterationData.get(\"user_id\");",
+							"let billing_address = pm.iterationData.get(\"billing_address\");",
+							"let billing_city = pm.iterationData.get(\"billing_city\");",
+							"let billing_state = pm.iterationData.get(\"billing_state\");",
+							"let billing_country = pm.iterationData.get(\"billing_country\");",
+							"let billing_postcode = pm.iterationData.get(\"billing_postcode\");",
+							"let total = pm.iterationData.get(\"total\");",
+							"let payment_method = pm.iterationData.get(\"payment_method\");",
+							"let payment_account_name = pm.iterationData.get(\"payment_account_name\");",
+							"let payment_account_number = pm.iterationData.get(\"payment_account_number\");",
+							"let invoice_items = pm.iterationData.get(\"invoice_items\");",
+							"",
+							"// Xây dựng body động cho request",
+							"let requestBody = {",
+							"    \"user_id\": user_id,",
+							"    \"billing_address\": billing_address,",
+							"    \"billing_city\": billing_city,",
+							"    \"billing_state\": billing_state,",
+							"    \"billing_country\": billing_country,",
+							"    \"billing_postcode\": billing_postcode,",
+							"    \"total\": total,",
+							"    \"payment_method\": payment_method,",
+							"    \"payment_account_name\": payment_account_name,",
+							"    \"payment_account_number\": payment_account_number,",
+							"    \"invoice_items\": invoice_items",
+							"};",
+							"",
+							"pm.request.headers.upsert({",
+							"    key: 'Content-Type',",
+							"    value: 'application/json' ",
+							"});",
+							"",
+							"// Cập nhật body cho request",
+							"pm.request.body.update({",
+							"    mode: 'raw',",
+							"    raw: JSON.stringify(requestBody)",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Lấy testcase_id và testcase_name từ iterationData",
+							"let testcase_id = pm.iterationData.get(\"testcase_id\");",
+							"let testcase_name = pm.iterationData.get(\"testcase_name\");",
+							"",
+							"// Lấy dữ liệu response body",
+							"let responseJson = pm.response.json();",
+							"",
+							"// Kiểm tra mã trạng thái (status code) của response",
+							"let expectStatus = Number(pm.iterationData.get(\"expectStatus\"));",
+							"pm.test(`${testcase_id} ${testcase_name} - Check valid status code`, function () {",
+							"    pm.response.to.have.status(expectStatus);",
+							"});",
+							"",
+							"if (expectStatus == 201) {",
+							"    // Lấy dữ liệu từ request body",
+							"    let user_id = parseInt(pm.iterationData.get(\"user_id\"));",
+							"    let billing_address = pm.iterationData.get(\"billing_address\");",
+							"    let billing_city = pm.iterationData.get(\"billing_city\");",
+							"    let billing_state = pm.iterationData.get(\"billing_state\");",
+							"    let billing_country = pm.iterationData.get(\"billing_country\");",
+							"    let billing_postcode = pm.iterationData.get(\"billing_postcode\");",
+							"    let total = parseFloat(pm.iterationData.get(\"total\"));",
+							"    let payment_method = pm.iterationData.get(\"payment_method\");",
+							"    let payment_account_name = pm.iterationData.get(\"payment_account_name\");",
+							"    let payment_account_number = pm.iterationData.get(\"payment_account_number\");",
+							"",
+							"    // Kiểm tra các thông tin yêu cầu trong response và so sánh với request body",
+							"    pm.test(`${testcase_id} ${testcase_name} - Check if billing_address matches request`, function () {",
+							"        pm.expect(responseJson.billing_address).to.eql(billing_address);",
+							"    });",
+							"",
+							"    pm.test(`${testcase_id} ${testcase_name} - Check if billing_city matches request`, function () {",
+							"        pm.expect(responseJson.billing_city).to.eql(billing_city);",
+							"    });",
+							"",
+							"    pm.test(`${testcase_id} ${testcase_name} - Check if billing_state matches request`, function () {",
+							"        pm.expect(responseJson.billing_state).to.eql(billing_state);",
+							"    });",
+							"",
+							"    pm.test(`${testcase_id} ${testcase_name} - Check if billing_country matches request`, function () {",
+							"        pm.expect(responseJson.billing_country).to.eql(billing_country);",
+							"    });",
+							"",
+							"    pm.test(`${testcase_id} ${testcase_name} - Check if billing_postcode matches request`, function () {",
+							"        pm.expect(responseJson.billing_postcode).to.eql(billing_postcode);",
+							"    });",
+							"",
+							"    pm.test(`${testcase_id} ${testcase_name} - Check if total matches request`, function () {",
+							"        pm.expect(responseJson.total).to.eql(total);",
+							"    });",
+							"",
+							"    pm.test(`${testcase_id} ${testcase_name} - Check if payment_method matches request`, function () {",
+							"        pm.expect(responseJson.payment_method).to.eql(payment_method);",
+							"    });",
+							"",
+							"    pm.test(`${testcase_id} ${testcase_name} - Check if payment_account_name matches request`, function () {",
+							"        pm.expect(responseJson.payment_account_name).to.eql(payment_account_name);",
+							"    });",
+							"",
+							"    pm.test(`${testcase_id} ${testcase_name} - Check if payment_account_number matches request`, function () {",
+							"        pm.expect(responseJson.payment_account_number).to.eql(payment_account_number);",
+							"    });",
+							"",
+							"    // Kiểm tra sự tồn tại của `id` và đảm bảo nó là số",
+							"    pm.test(`${testcase_id} ${testcase_name} - Check if id is a number`, function () {",
+							"        pm.expect(responseJson.id).to.be.a('number');    // Kiểm tra nếu id là số",
+							"    });",
+							"",
+							"    // Kiểm tra sự tồn tại của status",
+							"    pm.test(`${testcase_id} ${testcase_name} - Check if status field exists`, function () {",
+							"        pm.expect(responseJson).to.have.property('status');",
+							"    });",
+							"",
+							"    // Kiểm tra tính đúng đắn của total (tổng tiền)",
+							"    pm.test(`${testcase_id} ${testcase_name} - Check total is correct`, function () {",
+							"        let totalCalculated = 0;",
+							"",
+							"        // Tính tổng tiền từ các invoice_items",
+							"        responseJson.invoice_items.forEach(function(item) {",
+							"            totalCalculated += item.unit_price * item.quantity;",
+							"        });",
+							"",
+							"        // Kiểm tra tổng tiền trong response có khớp với tổng tính được",
+							"        pm.expect(responseJson.total).to.eql(totalCalculated);",
+							"    });",
+							"",
+							"    // Kiểm tra tính hợp lệ của các invoice_items",
+							"    pm.test(`${testcase_id} ${testcase_name} - Check invoice items are valid`, function () {",
+							"        responseJson.invoice_items.forEach(function(item) {",
+							"            // Kiểm tra unit_price và quantity không phải là 0 hoặc âm",
+							"            pm.expect(item.unit_price).to.be.above(0);",
+							"            pm.expect(item.quantity).to.be.above(0);",
+							"",
+							"            // Kiểm tra product_id có hợp lệ không (có thể cần gọi API để kiểm tra sản phẩm thực tế)",
+							"            pm.expect(item.product.id).to.be.a('number');",
+							"        });",
+							"    });",
+							"",
+							"    // Kiểm tra xem invoice_date có đúng định dạng không (yyyy-mm-dd hh:mm:ss)",
+							"    pm.test(`${testcase_id} ${testcase_name} - Check invoice_date format`, function () {",
+							"        pm.expect(responseJson.invoice_date).to.match(/^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$/);",
+							"    });",
+							"",
+							"    // Kiểm tra các thông tin liên quan đến product trong invoice_items (ví dụ: product.name, price)",
+							"    pm.test(`${testcase_id} ${testcase_name} - Check product details in invoice items`, function () {",
+							"        responseJson.invoice_items.forEach(function(item) {",
+							"            pm.expect(item.product.name).to.be.a('string').that.is.not.empty;",
+							"            pm.expect(item.product.price).to.be.a('number').that.is.above(0);",
+							"        });",
+							"    });",
+							"}",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/invoices",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"invoices"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Change password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const testcase_id   = pm.iterationData.get(\"TestCase ID\");\r",
+							"const testcase_name = pm.iterationData.get(\"TestCase Name\");\r",
+							"\r",
+							"// Lấy dữ liệu response body\r",
+							"let responseJson = pm.response.json();\r",
+							"\r",
+							"// Kiểm tra mã trạng thái (status code) của response\r",
+							"let expectStatus = Number(pm.iterationData.get(\"expectStatus\"));\r",
+							"pm.test(`${testcase_id} ${testcase_name} - Check valid status code`, function () {\r",
+							"    pm.response.to.have.status(expectStatus);\r",
+							"});\r",
+							"\r",
+							"// Định nghĩa request đăng nhập với mật khẩu mới\r",
+							"const loginRequest = {\r",
+							"    url: pm.variables.get(\"base_url\") + \"/users/login\",\r",
+							"    method: 'POST',\r",
+							"    header: {\r",
+							"        'Content-Type': 'application/json'\r",
+							"    },\r",
+							"    body: {\r",
+							"        mode: 'raw',\r",
+							"        raw: JSON.stringify({\r",
+							"            \"email\": pm.iterationData.get(\"email\"),  // Email từ request cũ\r",
+							"            \"password\": pm.iterationData.get(\"new_password\")  // Mật khẩu mới\r",
+							"        })\r",
+							"    }\r",
+							"};\r",
+							"\r",
+							"// Gửi yêu cầu đăng nhập sau khi thay đổi mật khẩu\r",
+							"pm.sendRequest(loginRequest, function (err, res) {\r",
+							"        // Nếu không có lỗi, kiểm tra trạng thái của đăng nhập\r",
+							"    if (expectStatus === 200) {\r",
+							"            // Nếu yêu cầu thay đổi mật khẩu thành công (200), thì đăng nhập cũng phải thành công (200)\r",
+							"        pm.test(`${testcase_id} ${testcase_name} - Login with new password success`, function () {\r",
+							"            pm.expect(res).to.have.status(200);  // Đăng nhập thành công với mật khẩu mới\r",
+							"        });\r",
+							"    }\r",
+							"    else {\r",
+							"    // Nếu yêu cầu thay đổi mật khẩu thất bại, thì đăng nhập sẽ không thành công\r",
+							"        pm.test(`${testcase_id} ${testcase_name} - Login with new password failed`, function () {\r",
+							"            pm.expect(res).to.have.status(401);  // Đăng nhập sẽ thất bại nếu thay đổi mật khẩu không thành công\r",
+							"        });\r",
+							"    }\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.request.headers.upsert({\r",
+							"    key: 'Content-Type',\r",
+							"    value: 'application/json' \r",
+							"});\r",
+							"\r",
+							"pm.request.body.update({\r",
+							"    mode: 'raw',\r",
+							"    raw: JSON.stringify({\r",
+							"        \"current_password\": pm.iterationData.get(\"current_password\"),\r",
+							"        \"new_password\": pm.iterationData.get(\"new_password\"),\r",
+							"        \"new_password_confirmation\": pm.iterationData.get(\"new_password_confirmation\")\r",
+							"    })\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/users/change-password",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users",
+						"change-password"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"// Hàm đăng nhập với vai trò admin (sử dụng callback thông thường của pm.sendRequest)",
+					"function login(email, password) {",
+					"    const baseUrl = pm.variables.get(\"base_url\");  ",
+					"    pm.sendRequest({",
+					"        url: `${baseUrl}/users/login`,",
+					"        method: 'POST',",
+					"        header: { 'Content-Type': 'application/json' },",
+					"        body: { mode: \"raw\", raw: JSON.stringify({ email, password }) }",
+					"    }, function(err, res) {",
+					"        const token = res.json()?.access_token;",
+					"        ",
+					"        if (token)",
+					"            pm.request.headers.upsert({key: \"Authorization\", value: `Bearer ${token}`});",
+					"        else",
+					"            pm.request.headers.remove(\"Authorization\");",
+					"    });",
+					"}",
+					"",
+					"// Kiểm tra role và gọi hàm tương ứng",
+					"function setAuthorizationHeader() {",
+					"    var loginRole = pm.iterationData.get(\"loginRole\"); ",
+					"    const email = pm.iterationData.get(\"email\");",
+					"    const password = pm.iterationData.get(\"password\");",
+					"",
+					"    if (email && password)",
+					"        login(email, password);",
+					"    else {",
+					"        if (loginRole) {",
+					"            if (loginRole == \"admin\") {",
+					"                login(\"admin@practicesoftwaretesting.com\", \"welcome01\");",
+					"            } else if (loginRole == \"user\") {",
+					"                login(\"customer@practicesoftwaretesting.com\", \"welcome01\");",
+					"            } else ",
+					"                pm.request.headers.remove(\"Authorization\");",
+					"        }",
+					"        pm.request.headers.remove(\"Authorization\");",
+					"    }",
+					"}",
+					"",
+					"// Gọi hàm setAuthorizationHeader",
+					"setAuthorizationHeader();",
+					"",
+					"// Cập nhật method và url cho request (nếu có)",
+					"let method = pm.iterationData.get(\"method\");",
+					"let url = pm.iterationData.get(\"url\");",
+					"if (method) pm.request.method = method; ",
+					"if (url) pm.request.url = url;",
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8091",
+			"type": "string"
+		}
+	]
+}

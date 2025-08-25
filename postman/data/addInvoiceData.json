@@ -1,0 +1,370 @@
+[
+  {
+    "testcase_id": "TC-CRE-INV-001",
+    "testcase_name": "Create invoice with one product and valid total",
+    "user_id": 2,
+    "billing_address": "Test street 123",
+    "billing_city": "Utrecht",
+    "billing_state": "Utrecht",
+    "billing_country": "The Netherlands",
+    "billing_postcode": "1122AB",
+    "total": 17.75,
+    "payment_method": "Bank Transfer",
+    "payment_account_name": "Tester",
+    "payment_account_number": "09876543A",
+    "loginRole": "user",
+    "invoice_items": [
+      {
+        "product_id": 10,
+        "quantity": 1,
+        "unit_price": 17.75
+      }
+    ],
+    "expectStatus": 201
+  },
+  {
+    "testcase_id": "TC-CRE-INV-002",
+    "testcase_name": "Invoice with correct total and multiple items",
+    "user_id": 2,
+    "billing_address": "Test street 123",
+    "billing_city": "Utrecht",
+    "billing_state": "Utrecht",
+    "billing_country": "The Netherlands",
+    "billing_postcode": "1122AB",
+    "total": 96.75,
+    "payment_method": "Cash on Delivery",
+    "payment_account_name": "Tester",
+    "payment_account_number": "09876543",
+    "loginRole": "user",
+    "invoice_items": [
+      {
+        "product_id": 1,
+        "quantity": 2,
+        "unit_price": 14.15
+      },
+      {
+        "product_id": 7,
+        "quantity": 2,
+        "unit_price": 12.58
+      },
+      {
+        "product_id": 8,
+        "quantity": 2,
+        "unit_price": 11.48
+      },
+      {
+        "product_id": 14,
+        "quantity": 1,
+        "unit_price": 20.33
+      }
+    ],
+    "expectStatus": 201
+  },
+  {
+    "testcase_id": "TC-CRE-INV-003",
+    "testcase_name": "Create invoice with special characters in payment account number",
+    "user_id": 3,
+    "billing_address": "Midway Road 123",
+    "billing_city": "Springdale",
+    "billing_state": "Arkansas",
+    "billing_country": "United States",
+    "billing_postcode": "72764",
+    "total": 37.74,
+    "payment_method": "Credit Card",
+    "payment_account_name": "Tester",
+    "payment_account_number": "411111******1111",
+    "loginRole": "user",
+    "invoice_items": [
+      {
+        "product_id": 7,
+        "quantity": 3,
+        "unit_price": 12.58
+      }
+    ],
+    "expectStatus": 201
+  },
+  {
+    "testcase_id": "TC-CRE-INV-004",
+    "testcase_name": "Admin creates invoice",
+    "user_id": 1,
+    "billing_address": "Admin street 456",
+    "billing_city": "Utrecht",
+    "billing_state": "Utrecht",
+    "billing_country": "The Netherlands",
+    "billing_postcode": "1122AB",
+    "total": 59.48,
+    "payment_method": "Bank Transfer",
+    "payment_account_name": "Admin Tester",
+    "payment_account_number": "9876543210",
+    "loginRole": "admin",
+    "invoice_items": [
+      {
+        "product_id": 15,
+        "quantity": 2,
+        "unit_price": 29.74
+      }
+    ],
+    "expectStatus": 201
+  },
+  {
+    "testcase_id": "TC-CRE-INV-005",
+    "testcase_name": "Unauthorized",
+    "user_id": 2,
+    "billing_address": "Test street 123",
+    "billing_city": "Utrecht",
+    "billing_state": "Utrecht",
+    "billing_country": "The Netherlands",
+    "billing_postcode": "1122AB",
+    "total": 17.75,
+    "payment_method": "Bank Transfer",
+    "payment_account_name": "Tester",
+    "payment_account_number": "09876543A",
+    "loginRole": "",
+    "invoice_items": [
+      {
+        "product_id": 10,
+        "quantity": 1,
+        "unit_price": 17.75
+      }
+    ],
+    "expectStatus": 401
+  },
+  {
+    "testcase_id": "TC-CRE-INV-006",
+    "testcase_name": "Invoice with invalid product_id",
+    "user_id": 3,
+    "billing_address": "Midway Road 123",
+    "billing_city": "Springdale",
+    "billing_state": "Arkansas",
+    "billing_country": "United States",
+    "billing_postcode": "72764",
+    "total": 80.0,
+    "payment_method": "Cash on Delivery",
+    "payment_account_name": "Tester",
+    "payment_account_number": "09876543",
+    "loginRole": "user",
+    "invoice_items": [
+      {
+        "product_id": 9999,
+        "quantity": 2,
+        "unit_price": 40.0
+      }
+    ],
+    "expectStatus": 404
+  },
+  {
+    "testcase_id": "TC-CRE-INV-007",
+    "testcase_name": "Invoice with valid data and missing product price",
+    "user_id": 2,
+    "billing_address": "Test street 123",
+    "billing_city": "Utrecht",
+    "billing_state": "Utrecht",
+    "billing_country": "The Netherlands",
+    "billing_postcode": "1122AB",
+    "total": 39.78,
+    "payment_method": "Cash on Delivery",
+    "payment_account_name": "Tester",
+    "payment_account_number": "09876543",
+    "loginRole": "user",
+    "invoice_items": [
+      {
+        "product_id": 1,
+        "quantity": 2
+      },
+      {
+        "product_id": 8,
+        "quantity": 1
+      }
+    ],
+    "expectStatus": 404
+  },
+  {
+    "url": "{{base_url}}/invoice",
+    "testcase_id": "TC-CRE-INV-008",
+    "testcase_name": "Create invoice with the wrong URL",
+    "user_id": 2,
+    "billing_address": "Test street 123",
+    "billing_city": "Utrecht",
+    "billing_state": "Utrecht",
+    "billing_country": "The Netherlands",
+    "billing_postcode": "1122AB",
+    "total": 17.75,
+    "payment_method": "Bank Transfer",
+    "payment_account_name": "Tester",
+    "payment_account_number": "09876543A",
+    "loginRole": "user",
+    "invoice_items": [
+      {
+        "product_id": 10,
+        "quantity": 1,
+        "unit_price": 17.75
+      }
+    ],
+    "expectStatus": 404
+  },
+  {
+    "method": "PUT",
+    "testcase_id": "TC-CRE-INV-009",
+    "testcase_name": "Create invoice with one product and valid total",
+    "user_id": 2,
+    "billing_address": "Test street 123",
+    "billing_city": "Utrecht",
+    "billing_state": "Utrecht",
+    "billing_country": "The Netherlands",
+    "billing_postcode": "1122AB",
+    "total": 17.75,
+    "payment_method": "Bank Transfer",
+    "payment_account_name": "Tester",
+    "payment_account_number": "09876543A",
+    "loginRole": "user",
+    "invoice_items": [
+      {
+        "product_id": 10,
+        "quantity": 1,
+        "unit_price": 17.75
+      }
+    ],
+    "expectStatus": 405
+  },
+  {
+    "testcase_id": "TC-CRE-INV-010",
+    "testcase_name": "Invoice with invalid quantity",
+    "user_id": 2,
+    "billing_address": "Test street 123",
+    "billing_city": "Utrecht",
+    "billing_state": "Utrecht",
+    "billing_country": "The Netherlands",
+    "billing_postcode": "1122AB",
+    "total": 0.0,
+    "payment_method": "Cash on Delivery",
+    "payment_account_name": "Tester",
+    "payment_account_number": "09876543",
+    "loginRole": "user",
+    "invoice_items": [
+      {
+        "product_id": 1,
+        "quantity": 0,
+        "unit_price": 14.15
+      }
+    ],
+    "expectStatus": 422
+  },
+  {
+    "testcase_id": "TC-CRE-INV-011",
+    "testcase_name": "Invoice with product having zero price",
+    "user_id": 2,
+    "billing_address": "Test street 123",
+    "billing_city": "Utrecht",
+    "billing_state": "Utrecht",
+    "billing_country": "The Netherlands",
+    "billing_postcode": "1122AB",
+    "total": 0.0,
+    "payment_method": "Cash on Delivery",
+    "payment_account_name": "Tester",
+    "payment_account_number": "09876543",
+    "loginRole": "user",
+    "invoice_items": [
+      {
+        "product_id": 1,
+        "quantity": 1,
+        "unit_price": 0.0
+      }
+    ],
+    "expectStatus": 422
+  },
+  {
+    "testcase_id": "TC-CRE-INV-012",
+    "testcase_name": "Invoice with total mismatch",
+    "user_id": 2,
+    "billing_address": "Test street 123",
+    "billing_city": "Utrecht",
+    "billing_state": "Utrecht",
+    "billing_country": "The Netherlands",
+    "billing_postcode": "1122AB",
+    "total": 999.99,
+    "payment_method": "Cash on Delivery",
+    "payment_account_name": "Tester",
+    "payment_account_number": "09876543",
+    "loginRole": "user",
+    "invoice_items": [
+      {
+        "product_id": 10,
+        "quantity": 1,
+        "unit_price": 17.75
+      }
+    ],
+    "expectStatus": 422
+  },
+  {
+    "testcase_id": "TC-CRE-INV-013",
+    "testcase_name": "Invoice with invalid payment method",
+    "user_id": 3,
+    "billing_address": "Midway Road 123",
+    "billing_city": "Springdale",
+    "billing_state": "Arkansas",
+    "billing_country": "United States",
+    "billing_postcode": "72764",
+    "total": 12.18,
+    "payment_method": "Crypto",
+    "payment_account_name": "Tester",
+    "payment_account_number": "09876543",
+    "loginRole": "user",
+    "invoice_items": [
+      {
+        "product_id": 13,
+        "quantity": 1,
+        "unit_price": 12.18
+      }
+    ],
+    "expectStatus": 422
+  },
+  {
+    "testcase_id": "TC-CRE-INV-014",
+    "testcase_name": "Invoice with missing total",
+    "user_id": 2,
+    "billing_address": "Test street 123",
+    "billing_city": "Utrecht",
+    "billing_state": "Utrecht",
+    "billing_country": "The Netherlands",
+    "billing_postcode": "1122AB",
+    "payment_method": "Cash on Delivery",
+    "payment_account_name": "Tester",
+    "payment_account_number": "09876543",
+    "loginRole": "user",
+    "invoice_items": [
+      {
+        "product_id": 1,
+        "quantity": 2,
+        "unit_price": 14.15
+      },
+      {
+        "product_id": 8,
+        "quantity": 1,
+        "unit_price": 11.48
+      }
+    ],
+    "expectStatus": 422
+  },
+  {
+    "testcase_id": "TC-CRE-INV-015",
+    "testcase_name": "Invoice with missing billing information",
+    "user_id": 2,
+    "billing_address": "Test street 123",
+    "billing_state": "Utrecht",
+    "billing_country": "",
+    "billing_postcode": "1122AB",
+    "total": 20.14,
+    "payment_method": "Cash on Delivery",
+    "payment_account_name": "Tester",
+    "payment_account_number": "09876543123",
+    "loginRole": "user",
+    "invoice_items": [
+      {
+        "product_id": 11,
+        "quantity": 1,
+        "unit_price": 20.14
+      }
+    ],
+    "expectStatus": 422
+  }
+]

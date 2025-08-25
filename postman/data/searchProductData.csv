@@ -1,0 +1,7 @@
+method,url,name,status
+GET,{{base_url}}/products/search,Pliers,200
+POST,{{base_url}}/products/search,Hammer,405
+GET,{{base_url}}/product/search,Claw Hammer,404
+GET,{{base_url}}/products/search,ABC1,200
+GET,{{base_url}}/products/search,gaming laptop,200
+GET,{{base_url}}/products/search,12345,200

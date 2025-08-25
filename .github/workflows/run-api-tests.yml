@@ -35,7 +35,8 @@ jobs:
           mkdir -p newman
           newman run postman/collections/HW07.postman_collection.json \
             --folder "Search product" \
-            --iteration-data postman/data/addProductData.csv \
+            --iteration-data postman/data/searchProductData.csv \
+
 
       - name: Cleanup containers
         if: always()
