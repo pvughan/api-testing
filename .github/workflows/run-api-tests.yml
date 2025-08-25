@@ -36,8 +36,6 @@ jobs:
           newman run postman/collections/HW07.postman_collection.json \
             --folder "Search product" \
             --iteration-data postman/data/addProductData.csv \
-            --reporters cli,htmlextra \
-      	    --reporter-htmlextra-export "reports/search_product.html"
 
       - name: Cleanup containers
         if: always()
