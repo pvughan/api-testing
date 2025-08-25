@@ -33,41 +33,11 @@ jobs:
       - name: Newman - Create new product
         run: |
           mkdir -p newman
-          newman run postman/collections/APITestingToolShop.postman_collection.json \
-            --folder "Create new product" \
-            -e postman/environments/ToolshopEnvironment.postman_environment.json \
+          newman run postman/collections/HW07.postman_collection.json \
+            --folder "Search product" \
             --iteration-data postman/data/addProductData.csv \
             --reporters cli,htmlextra \
-            --reporter-htmlextra-export newman/report-create-product.html \
-            --timeout-request 15000
-
-      - name: Create & Seed database 🌱
-        run: |
-          docker compose exec -T laravel-api php artisan migrate:refresh --seed
-      - name: Newman - Search invoice
-        run: |
-          mkdir -p newman
-          newman run postman/collections/APITestingToolShop.postman_collection.json \
-            --folder "Search invoice" \
-            -e postman/environments/ToolshopEnvironment.postman_environment.json \
-            --iteration-data postman/data/searchInvoiceData.csv \
-            --reporters cli,htmlextra \
-            --reporter-htmlextra-export newman/report-search-invoice.html \
-            --timeout-request 15000
-
-      - name: Create & Seed database 🌱
-        run: |
-          docker compose exec -T laravel-api php artisan migrate:refresh --seed
-      - name: Newman - Add to favourite
-        run: |
-          mkdir -p newman
-          newman run postman/collections/APITestingToolShop.postman_collection.json \
-            --folder "Add to favourite" \
-            -e postman/environments/ToolshopEnvironment.postman_environment.json \
-            --iteration-data postman/data/addToFavouriteData.csv \
-            --reporters cli,htmlextra \
-            --reporter-htmlextra-export newman/report-add-to-favourite.html \
-            --timeout-request 15000
+      	    --reporter-htmlextra-export "reports/search_product.html"
 
       - name: Cleanup containers
         if: always()
